@@ -9,12 +9,13 @@ CUAI 동아리 데이터톤 프로젝트 저장소입니다.
 1. [Git이란?](#1-git이란)
 2. [초기 설정](#2-초기-설정)
 3. [프로젝트 시작하기](#3-프로젝트-시작하기)
-4. [브랜치 전략](#4-브랜치-전략)
-5. [기본 작업 흐름](#5-기본-작업-흐름)
-6. [커밋 메시지 규칙](#6-커밋-메시지-규칙)
-7. [Pull Request (PR) 만들기](#7-pull-request-pr-만들기)
-8. [자주 쓰는 명령어 모음](#8-자주-쓰는-명령어-모음)
-9. [문제 상황 해결](#9-문제-상황-해결)
+4. [Python 환경설정 (venv)](#4-python-환경설정-venv)
+5. [브랜치 전략](#5-브랜치-전략)
+6. [기본 작업 흐름](#6-기본-작업-흐름)
+7. [커밋 메시지 규칙](#7-커밋-메시지-규칙)
+8. [Pull Request (PR) 만들기](#8-pull-request-pr-만들기)
+9. [자주 쓰는 명령어 모음](#9-자주-쓰는-명령어-모음)
+10. [문제 상황 해결](#10-문제-상황-해결)
 
 ---
 
@@ -118,7 +119,163 @@ git checkout -b 본인이름
 
 ---
 
-## 4. 브랜치 전략
+## 4. Python 환경설정 (venv)
+
+이 프로젝트는 Python **가상환경(venv)**을 사용합니다. 가상환경을 사용하면 **프로젝트마다 독립적인 패키지 환경**을 만들 수 있어서, 다른 프로젝트와 패키지가 충돌하지 않습니다.
+
+> 비유하자면: 각 프로젝트마다 별도의 "도구 상자"를 두는 것과 같습니다. A 프로젝트에서 쓰는 도구와 B 프로젝트에서 쓰는 도구가 섞이지 않습니다.
+
+### 4-1. Python 설치 확인
+
+먼저 Python이 설치되어 있는지 확인합니다.
+
+```bash
+python --version
+```
+
+`Python 3.10` 이상이 출력되면 됩니다. 설치되어 있지 않다면 [Python 공식 사이트](https://www.python.org/downloads/)에서 다운로드합니다.
+
+> **설치 시 주의**: 설치 화면에서 **"Add Python to PATH"** 체크박스를 반드시 체크해주세요!
+
+### 4-2. 가상환경 만들기 (처음 한 번만)
+
+프로젝트 폴더(`datathon/`) 안에서 아래 명령어를 실행합니다.
+
+```bash
+python -m venv .venv
+```
+
+> 이 명령어는 `.venv`라는 폴더를 만들고, 그 안에 독립적인 Python 환경을 세팅합니다.
+> `.venv` 폴더는 `.gitignore`에 포함되어 있어서 GitHub에는 올라가지 않습니다.
+
+### 4-3. 가상환경 활성화
+
+**가상환경을 활성화**해야 그 안에 패키지를 설치하고 사용할 수 있습니다. 터미널 종류에 따라 명령어가 다릅니다.
+
+**VS Code 터미널 (PowerShell) — 가장 많이 사용:**
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+> PowerShell에서 "스크립트를 실행할 수 없습니다" 오류가 나면 아래 명령어를 **먼저** 실행하세요:
+> ```powershell
+> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+> ```
+> 이 명령어는 한 번만 실행하면 됩니다.
+
+**VS Code 터미널 (Git Bash):**
+```bash
+source .venv/Scripts/activate
+```
+
+**CMD (명령 프롬프트):**
+```cmd
+.venv\Scripts\activate
+```
+
+### 활성화 확인
+
+활성화에 성공하면 터미널 프롬프트 앞에 `(.venv)`가 표시됩니다:
+
+```
+(.venv) PS C:\...\datathon>     ← 이렇게 (.venv)가 보이면 성공!
+```
+
+### 4-4. 패키지 설치
+
+가상환경이 활성화된 상태에서 아래 명령어를 실행합니다.
+
+```bash
+pip install -r requirements.txt
+```
+
+> `requirements.txt` 파일에 이 프로젝트에 필요한 모든 패키지 목록이 적혀 있습니다.
+> 위 명령어 한 줄이면 모든 패키지가 자동으로 설치됩니다.
+
+설치되는 주요 패키지:
+
+| 패키지 | 용도 |
+|--------|------|
+| `pandas` | 데이터 분석 (표 형태 데이터 다루기) |
+| `numpy` | 수치 계산 |
+| `matplotlib` | 그래프/시각화 |
+| `seaborn` | 통계 시각화 (matplotlib 기반) |
+| `scikit-learn` | 머신러닝 모델 |
+| `ipykernel` | VS Code에서 Jupyter Notebook 실행 |
+
+### 4-5. VS Code에서 Jupyter Notebook 커널 연결
+
+패키지 설치 후, VS Code에서 `.ipynb` 파일을 열었을 때 **커널을 선택**해야 합니다.
+
+1. `.ipynb` 파일을 엽니다 (예: `datathon_base_notebook.ipynb`)
+2. 우측 상단의 **"커널 선택"** (또는 "Select Kernel") 버튼을 클릭합니다
+3. **"Python Environments..."** 를 선택합니다
+4. 목록에서 **`.venv (Python 3.x.x)`** 를 선택합니다
+
+> 커널 목록에 `.venv`가 안 보이면, VS Code를 껐다가 다시 열어보세요.
+
+### 4-6. 가상환경 비활성화
+
+작업이 끝나면 아래 명령어로 비활성화할 수 있습니다 (필수는 아닙니다):
+
+```bash
+deactivate
+```
+
+### 4-7. 새 패키지를 추가한 경우
+
+작업 중 새로운 패키지를 설치했다면, 다른 팀원과 공유하기 위해 `requirements.txt`를 업데이트해야 합니다.
+
+```bash
+# 새 패키지 설치 (예시)
+pip install xgboost lightgbm
+
+# requirements.txt 업데이트
+pip freeze > requirements.txt
+
+# 변경된 requirements.txt를 커밋
+git add requirements.txt
+git commit -m "chore: requirements.txt 업데이트 (xgboost, lightgbm 추가)"
+git push origin 본인이름
+```
+
+> **중요**: 새 패키지를 설치한 후 `pip freeze > requirements.txt`를 잊지 마세요!
+> 이걸 해야 다른 팀원도 같은 환경을 만들 수 있습니다.
+
+### 4-8. 전체 순서 요약 (처음 세팅할 때)
+
+```bash
+# 1. 저장소 복제
+git clone https://github.com/brian-223134/datathon.git
+cd datathon
+
+# 2. 가상환경 생성
+python -m venv .venv
+
+# 3. 가상환경 활성화 (PowerShell 기준)
+.venv\Scripts\Activate.ps1
+
+# 4. 패키지 설치
+pip install -r requirements.txt
+
+# 5. 끝! 이제 노트북을 열고 작업하면 됩니다
+```
+
+### 매번 작업을 시작할 때
+
+```bash
+# 1. 가상환경 활성화 (매번 터미널을 새로 열 때마다)
+.venv\Scripts\Activate.ps1
+
+# 2. 혹시 다른 팀원이 새 패키지를 추가했을 수 있으니, 동기화
+pip install -r requirements.txt
+
+# 3. 작업 시작!
+```
+
+---
+
+## 5. 브랜치 전략
 
 우리 프로젝트는 **3단계 브랜치 구조**를 사용합니다.
 
@@ -146,7 +303,7 @@ main (최종 결과물)
 
 ---
 
-## 5. 기본 작업 흐름
+## 6. 기본 작업 흐름
 
 매일 작업할 때 아래 순서를 따라주세요.
 
@@ -200,7 +357,7 @@ git add .
 git commit -m "feat: EDA 시각화 코드 추가"
 ```
 
-> 커밋 메시지 작성 규칙은 [6. 커밋 메시지 규칙](#6-커밋-메시지-규칙)을 참고하세요.
+> 커밋 메시지 작성 규칙은 [7. 커밋 메시지 규칙](#7-커밋-메시지-규칙)을 참고하세요.
 
 ### Step 6: GitHub에 올리기
 
@@ -211,11 +368,11 @@ git push origin 본인이름
 
 ### Step 7: PR 만들기 (작업 단위가 완료되었을 때)
 
-GitHub 웹사이트에서 Pull Request를 만듭니다. ([7번 섹션](#7-pull-request-pr-만들기) 참고)
+GitHub 웹사이트에서 Pull Request를 만듭니다. ([8번 섹션](#8-pull-request-pr-만들기) 참고)
 
 ---
 
-## 6. 커밋 메시지 규칙
+## 7. 커밋 메시지 규칙
 
 ### 형식
 
@@ -250,7 +407,7 @@ update               ← 타입도 없고 내용도 불명확
 
 ---
 
-## 7. Pull Request (PR) 만들기
+## 8. Pull Request (PR) 만들기
 
 PR은 "내 작업을 develop 브랜치에 합쳐주세요"라고 요청하는 것입니다.
 
@@ -286,7 +443,7 @@ feat: EDA 및 기초 시각화 코드 추가
 
 ---
 
-## 8. 자주 쓰는 명령어 모음
+## 9. 자주 쓰는 명령어 모음
 
 ### 기본 명령어
 
@@ -316,7 +473,7 @@ feat: EDA 및 기초 시각화 코드 추가
 
 ---
 
-## 9. 문제 상황 해결
+## 10. 문제 상황 해결
 
 ### "내가 수정한 파일이 충돌(conflict)났어요"
 
@@ -381,10 +538,12 @@ git branch
 
 ```
 datathon/
+├── .venv/                        # Python 가상환경 (Git에 포함되지 않음)
 ├── csv/                          # 데이터 파일 (Git에 포함되지 않음)
 ├── datathon_base_notebook.ipynb  # 기본 노트북
+├── requirements.txt              # Python 패키지 목록
 ├── .gitignore                    # Git에서 제외할 파일 목록
 └── README.md                     # 이 문서
 ```
 
-> `.gitignore`에 의해 `.csv` 파일은 GitHub에 올라가지 않습니다. 데이터 파일은 별도로 공유합니다.
+> `.gitignore`에 의해 `.csv` 파일과 `.venv/` 폴더는 GitHub에 올라가지 않습니다. 데이터 파일은 별도로 공유합니다.
