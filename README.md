@@ -201,6 +201,7 @@ pip install -r requirements.txt
 | `matplotlib` | 그래프/시각화 |
 | `seaborn` | 통계 시각화 (matplotlib 기반) |
 | `scikit-learn` | 머신러닝 모델 |
+| `lightgbm` | 고성능 그래디언트 부스팅 모델 (Microsoft 개발) |
 | `ipykernel` | VS Code에서 Jupyter Notebook 실행 |
 
 ### 4-5. VS Code에서 Jupyter Notebook 커널 연결
